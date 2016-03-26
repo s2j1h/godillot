@@ -30,7 +30,7 @@ type Stat struct {
 }
 
 func (s Service) String() string {
-	return fmt.Sprintf("%s\tStatus: %d\tUptime: %s\tMemory: %.2f\tCPU: %.2f", s.Name, s.Status, transformUptime(s.Uptime), s.Memory.Percent, s.Memory.Percent)
+	return fmt.Sprintf("%s\tStatus: %d\tUptime: %s\tMemory: %.1f%%\tCPU: %.1f%%", s.Name, s.Status, transformUptime(s.Uptime), s.Memory.Percent, s.Memory.Percent)
 }
 
 //Transform uptime (seconds) to string "dayshoursminutes"
@@ -46,7 +46,8 @@ type Conf struct {
 }
 
 type Server struct {
-	Url string `yaml:"url"`
+	Url        string `yaml:"url"`
+	ServerName string `yaml:"server"`
 }
 
 //Get conf from yaml file
@@ -86,6 +87,7 @@ func main() {
 		decoder.CharsetReader = charset.NewReaderLabel
 		err = decoder.Decode(&monit)
 
+		fmt.Printf("\n** %s **\n", server.ServerName)
 		for _, service := range monit.Services {
 			fmt.Printf("%s\n", service)
 		}
