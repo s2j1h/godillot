@@ -1,0 +1,16 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Godillot</title>
+</head>
+<body>
+    <div>
+    {{range serversList}}
+        {{template "server" .}}
+    {{end}}
+    </div>
+</body>
+</html>
+{{end}}
