@@ -13,8 +13,11 @@ Type `godillot` from the command line
 ####Config
 Configuration with a yaml file, named "godillot.yaml"
 
+    outputfile: index.html
     servers:
       - server: Watchdog
-        url: http://admin:monit@Serveur1:2812/_status?format=xml
+        url: http://admin:monit@watchdog:2812/_status?format=xml
       - server: Obelix  
-        url: http://admin:monit@Serveur2:2812/_status?format=xml
+        url: http://admin:monit@obelix:2812/_status?format=xml
+      - server: Domify  
+        url: http://admin:monit@domify:2812/_status?format=xml

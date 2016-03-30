@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"encoding/xml"
 	"fmt"
 	"golang.org/x/net/html/charset"
@@ -33,15 +34,25 @@ type Stat struct {
 }
 
 func (s Service) String() string {
-	return fmt.Sprintf("%s\tStatus: %d\tUptime: %s\tMemory: %.1f%%\tCPU: %.1f%%", s.Name, s.Status, transformUptime(s.Uptime), s.Memory.Percent, s.CPU.Percent)
+	return fmt.Sprintf("%s\tStatus: %s\tUptime: %s\tMemory: %.1f%%\tCPU: %.1f%%", s.Name, GetStatus(s), TransformUptime(s), s.Memory.Percent, s.CPU.Percent)
 }
 
-//Transform uptime (seconds) to string "dayshoursminutes"
-func transformUptime(uptime int32) string {
+//Transform uptime (seconds) to string "dayshoursminutes" -- part of Service structure
+func TransformUptime(s Service) string {
+	uptime := s.Uptime
 	var minutes int32 = uptime % 3600 / 60
 	var hours int32 = uptime % 86400 / 3600
 	var days int32 = uptime / 86400
 	return fmt.Sprintf("%dd%dh%dm", days, hours, minutes)
+}
+
+//Transform status
+func GetStatus(s Service) string {
+	var status string = "Failure"
+	if s.Status == 0 {
+		status = "Running"
+	}
+	return status
 }
 
 //Struct file for configuration file
@@ -77,19 +88,35 @@ type Data struct {
 }
 
 // create html page using go templates
-func createPage(data Data) {
-	t := template.New("server template")
+func createPage(data Data, filename string) {
 
-	t = template.Must(t.ParseFiles("layout.html", "server.html"))
+	t := template.New("servertemplate").Funcs(template.FuncMap{
+		"transformUptime": TransformUptime,
+		"getStatus":       GetStatus,
+	})
+
+	t = template.Must(t.ParseFiles("layout.html"))
+
+	file, err := os.Create(filename)
+	if err != nil {
+		log.Fatalf("createPage.newFile: %s", err)
+		return
+	}
+	defer file.Close()
+	w := bufio.NewWriter(file)
 
 	// Exécution de la fusion et injection dans le flux de sortie
 	// La variable p sera réprésentée par le "." dans le layout
 	// Exemple {{.}} == p
-	err := t.ExecuteTemplate(os.Stdout, "layout", data)
+	//var buff bytes.Buffer
 
-	if err != nil {
-		log.Fatalf("createPage.Template: %s", err)
+	err2 := t.ExecuteTemplate(w, "layout", data)
+
+	if err2 != nil {
+		log.Fatalf("createPage.Template: %s", err2)
 	}
+	w.Flush()
+
 }
 
 func main() {
@@ -133,6 +160,6 @@ func main() {
 		}
 	}
 	htmlData := Data{serversList}
-	createPage(htmlData)
+	createPage(htmlData, configuration.OutputFile)
 
 }
