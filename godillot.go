@@ -153,12 +153,12 @@ func main() {
 
 	}
 
-	for _, server := range serversList {
+	/*for _, server := range serversList {
 		fmt.Printf("\n** %s **\n", server.Name)
 		for _, service := range server.Services {
 			fmt.Printf("%s\n", service)
 		}
-	}
+	}*/
 	htmlData := Data{serversList}
 	createPage(htmlData, configuration.OutputFile)
 
