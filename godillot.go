@@ -72,11 +72,13 @@ func (c *Conf) getConf() *Conf {
 
 	yamlFile, err := ioutil.ReadFile("godillot.yaml")
 	if err != nil {
-		log.Printf("yamlFile.Get err   #%v ", err)
+		log.Fatalf("yamlFile.Get err   #%v ", err)
+		os.Exit(1)
 	}
 	err = yaml.Unmarshal(yamlFile, c)
 	if err != nil {
 		log.Fatalf("yamlFile.Unmarshal: %v", err)
+		os.Exit(1)
 	}
 
 	return c
@@ -158,12 +160,12 @@ func main() {
 
 	}
 
-	/*for _, server := range serversList {
-		fmt.Printf("\n** %s **\n", server.Name)
+	for _, server := range serversList {
+		fmt.Printf("** %s **\n", server.Name)
 		for _, service := range server.Services {
 			fmt.Printf("%s\n", service)
 		}
-	}*/
+	}
 	log.Printf("Creating html page...")
 	htmlData := Data{serversList, newFormat}
 	createPage(htmlData, configuration.OutputFile)
