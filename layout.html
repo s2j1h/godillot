@@ -3,7 +3,8 @@
 <html lang="en-US"> 
 <head> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">   
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+  <meta http-equiv="refresh" content="130;url=index.html">
   <title>Godillot</title>
   
   <style type="text/css">
@@ -187,7 +188,7 @@ table tr:hover td{
   
 </head> 
 <body class="no-touch"> 
-    <div style="padding:20px;text-align: center;font-size:30px">Godillot: Monit instances status</div>
+    <div style="padding:20px;text-align: center;font-size:30px">Godillot <{{.Date}} ></div>
   <div class="wrap">
     
     {{range .Servers}}
