@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 //Structures for monit xml files
@@ -85,6 +86,7 @@ func (c *Conf) getConf() *Conf {
 
 type Data struct {
 	Servers []Server
+	Date    string
 }
 
 // create html page using go templates
@@ -126,6 +128,9 @@ func main() {
 	configuration.getConf()
 
 	fmt.Printf("\n** Godillot v0.5**\n")
+	currentTime := time.Now().Local()
+	newFormat := currentTime.Format("2006-01-02 15:04:05")
+	log.Printf("Fetching data...")
 
 	for _, serverConf := range configuration.Servers {
 		response, err := http.Get(serverConf.Url)
@@ -159,7 +164,9 @@ func main() {
 			fmt.Printf("%s\n", service)
 		}
 	}*/
-	htmlData := Data{serversList}
+	log.Printf("Creating html page...")
+	htmlData := Data{serversList, newFormat}
 	createPage(htmlData, configuration.OutputFile)
+	log.Printf("Finish!")
 
 }
