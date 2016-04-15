@@ -1,12 +1,14 @@
 outputfile: index.html
 servers:
   - server: Watchdog
-    url: http://admin:monit@watchdog:2812/_status?format=xml
+    url: http://admin:monit@watchdog:2812
   - server: Obelix  
-    url: http://admin:monit@obelix:2812/_status?format=xml
+    url: http://admin:monit@obelix:2812
   - server: Domify  
-    url: http://admin:monit@domify:2812/_status?format=xml
+    url: http://admin:monit@domify:2812
   - server: Picasso  
-    url: http://admin:monit@picasso:2812/_status?format=xml
+    url: http://admin:monit@picasso:2812
   - server: Peon  
-    url: http://admin:monit@peon:2812/_status?format=xml
+    url: http://admin:monit@peon:2812
+  - server: Coincraft
+    url: http://admin:monit@coincraft:2812

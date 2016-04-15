@@ -17,6 +17,7 @@ import (
 //Structures for monit xml files
 type Server struct {
 	Name     string
+	Url      string    `xml:"url"`
 	Services []Service `xml:"service"`
 }
 
@@ -129,21 +130,21 @@ func main() {
 	var serversList []Server
 	configuration.getConf()
 
-	fmt.Printf("\n** Godillot v0.5**\n")
+	fmt.Printf("\n** Godillot v0.6**\n")
 	currentTime := time.Now().Local()
 	newFormat := currentTime.Format("2006-01-02 15:04:05")
 	log.Printf("Fetching data...")
 
 	for _, serverConf := range configuration.Servers {
-		response, err := http.Get(serverConf.Url)
+		response, err := http.Get(serverConf.Url + "/_status?format=xml")
 		if err != nil {
 			log.Fatalf("main.GetUrl: %v", err)
-			os.Exit(1)
+			continue
 		}
 		defer response.Body.Close()
 		if err != nil {
 			log.Fatalf("main.Body: %v", err)
-			os.Exit(1)
+			continue
 		}
 
 		var server Server
@@ -152,10 +153,10 @@ func main() {
 		err = decoder.Decode(&server)
 		if err != nil {
 			log.Fatalf("main.Unmarshal: %v", err)
-			os.Exit(1)
+			continue
 		}
 		server.Name = serverConf.ServerName
-
+		server.Url = serverConf.Url
 		serversList = append(serversList, server)
 
 	}

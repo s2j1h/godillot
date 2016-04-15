@@ -16,11 +16,11 @@ Configuration with a yaml file, named "godillot.yaml"
     outputfile: index.html #html file created by godillot with the collected info
     servers: #list of servers
       - server: Watchdog #Name
-        url: http://admin:monit@watchdog:2812/_status?format=xml #url (don't forget _status?formal=xml, and to enable monit web server)
+        url: http://admin:monit@watchdog:2812 #url (don't forget to enable monit web server)
       - server: Obelix  
-        url: http://admin:monit@obelix:2812/_status?format=xml
+        url: http://admin:monit@obelix:2812
       - server: Domify  
-        url: http://admin:monit@domify:2812/_status?format=xml
+        url: http://admin:monit@domify:2812
 
 ####Example
 See godillot in action on [godillot.zeneffy.fr](http://godillot.zeneffy.fr)
